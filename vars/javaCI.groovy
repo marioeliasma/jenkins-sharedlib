@@ -16,8 +16,8 @@ def call() {
         }
 
         stage("Deploy to Docker hub") {
-            docker.build("${dockerTool}", "consultec-test:v1", "/Dockerfile")
-            docker.publish("${dockerTool}","consultec-test:v1")
+            docker.build("consultec-test:v1", "/Dockerfile")
+            docker.publish("consultec-test:v1")
         }
     }
  
