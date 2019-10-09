@@ -3,7 +3,7 @@ def call() {
     node {
 
         def MAVEN_HOME = tool name: 'maven-3.6.2', type: 'maven'
-        def dockerTool = "docker-17.09.1-ce"
+        def DOCKER_HOME = tool name: "docker-17.09.1-ce", type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
         
         
         stage("Test") { 
@@ -16,8 +16,12 @@ def call() {
         }
 
         stage("Deploy to Docker hub") {
-            docker.build("consultec-test:v1", "/Dockerfile")
-            docker.publish("consultec-test:v1")
+            pom = readMavenPom file: 'pom.xml'
+            withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
+                sh "${DOCKER_HOME}/bin/docker build -t $username/${pom.artifactId}:${pom.version} ."
+                sh "${DOCKER_HOME}/bin/docker login -u $username -p $password"
+                sh "${DOCKER_HOME}/bin/docker push $username/${pom.artifactId}:${pom.version}"
+            }
         }
     }
  
