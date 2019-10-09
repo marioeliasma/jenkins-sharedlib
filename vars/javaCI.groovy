@@ -3,7 +3,7 @@ def call() {
     node {
 
         def MAVEN_HOME = tool name: 'maven-3.6.2', type: 'maven'
-        
+        def DOCKER_HOME = tool name: 'docker-17.09.1-ce', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
         
         stage("Test") { 
             checkout scm
