@@ -2,13 +2,15 @@ def call() {
 
 pipeline {
 
+    agent {
+        label 'master'
+    }
+
     environment {
         MAVEN_HOME = tool name: 'maven-3.6.2', type: 'maven'
         DOCKER_HOME = tool name: 'docker-17.09.1-ce', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
     }
     
-
-    stages {
         stage("Test") {
             steps {
                 checkout scm
@@ -28,7 +30,7 @@ pipeline {
                 docker.publish("${DOCKER_HOME}","consultec-test:v1")
             }
         }
-    }
+    
     
 }
     
