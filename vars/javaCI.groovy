@@ -5,7 +5,12 @@ def call() {
         def MAVEN_HOME = tool name: 'maven-3.6.2', type: 'maven'
         def DOCKER_HOME = tool name: "docker-17.09.1-ce", type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
         
-        
+        stage("sonar") {
+            pom = readMavenPom file: 'pom.xml'
+            withCredentials([string(credentialsId: 'sonar', variable: 'secret')]) {
+                sh "${MAVEN_HOME}/bin/mvn sonar:sonar -Dsonar.projectKey=${pom.groupId}:${pom.artifactId} -Dsonar.login=${secret} -Dsonar.host.url=http://localhost:9000"
+            }
+        }
         stage("Test") { 
             checkout scm
             sh "${MAVEN_HOME}/bin/mvn test"
