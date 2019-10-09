@@ -8,7 +8,7 @@ def call() {
         stage("sonar") {
             pom = readMavenPom file: 'pom.xml'
             withCredentials([string(credentialsId: 'sonar', variable: 'secret')]) {
-                sh "${MAVEN_HOME}/bin/mvn sonar:sonar -Dsonar.projectKey=${pom.groupId}:${pom.artifactId} -Dsonar.login=${secret} -Dsonar.host.url=http://172.16.30.117.:9000"
+                sh "${MAVEN_HOME}/bin/mvn sonar:sonar -Dsonar.projectKey=${pom.groupId}:${pom.artifactId} -Dsonar.login=${secret} -Dsonar.host.url=http://172.16.30.117:9000"
             }
         }
         stage("Test") { 
