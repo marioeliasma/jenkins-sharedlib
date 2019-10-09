@@ -3,7 +3,8 @@ def call() {
     node {
 
         def MAVEN_HOME = tool name: 'maven-3.6.2', type: 'maven'
-        def DOCKER_HOME = tool name: 'docker-17.09.1-ce', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
+        def dockerTool = "docker-17.09.1-ce"
+        
         
         stage("Test") { 
             checkout scm
@@ -15,8 +16,8 @@ def call() {
         }
 
         stage("Deploy to Docker hub") {
-            docker.build("${DOCKER_HOME.toString()}/bin/docker", "consultec-test:v1", "/Dockerfile")
-            docker.publish("${DOCKER_HOME.toString()}/bin/docker","consultec-test:v1")
+            docker.build("${dockerTool}", "consultec-test:v1", "/Dockerfile")
+            docker.publish("${dockerTool}","consultec-test:v1")
         }
     }
  
